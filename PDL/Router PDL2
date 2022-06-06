@@ -1,0 +1,145 @@
+Building configuration...
+
+Current configuration : 2331 bytes
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname PDL2
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.40
+ encapsulation dot1Q 40
+ ip address 10.6.40.1 255.255.255.0
+ ip helper-address 192.168.6.2
+ standby 4 ip 10.6.40.253
+ standby 4 priority 105
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 10.6.10.1 255.255.255.0
+ ip helper-address 192.168.6.2
+ standby 1 ip 10.6.10.253
+ standby 1 priority 105
+ standby 1 track Serial0/0/1
+!
+interface FastEthernet0/1.20
+ encapsulation dot1Q 20
+ ip address 10.6.20.1 255.255.255.0
+ ip helper-address 192.168.6.2
+ standby 2 ip 10.6.20.253
+ standby 2 priority 105
+ standby 2 track Serial0/0/1
+!
+interface FastEthernet0/1.30
+ encapsulation dot1Q 30
+ ip address 10.6.30.1 255.255.255.0
+ ip helper-address 192.168.6.2
+ standby 3 ip 10.6.30.253
+ standby 3 priority 105
+ standby 3 track Serial0/0/1
+!
+interface FastEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 10.6.50.1 255.255.255.0
+ ip helper-address 192.168.6.2
+ standby 5 ip 10.6.50.253
+ standby 5 priority 105
+ standby 5 track Serial0/0/1
+!
+interface Serial0/0/0
+ ip address 192.168.6.1 255.255.255.252
+ clock rate 2000000
+!
+interface Serial0/0/1
+ ip address 1.0.0.10 255.255.255.252
+ clock rate 2000000
+!
+interface Serial0/1/0
+ ip address 192.168.6.21 255.255.255.252
+!
+interface Serial0/1/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 100
+ log-adjacency-changes
+ passive-interface FastEthernet0/0
+ passive-interface FastEthernet0/1
+ network 192.168.6.0 0.0.0.3 area 0
+ network 10.6.10.0 0.0.0.255 area 0
+ network 10.6.20.0 0.0.0.255 area 0
+ network 10.6.30.0 0.0.0.255 area 0
+ network 10.6.40.0 0.0.0.255 area 0
+ network 10.6.50.0 0.0.0.255 area 0
+ network 1.0.0.8 0.0.0.3 area 0
+ network 192.168.6.20 0.0.0.3 area 0
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 Serial0/0/0 
+ip route 0.0.0.0 0.0.0.0 Serial0/0/1 120
+ip route 192.168.6.4 255.255.255.252 192.168.6.2 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
