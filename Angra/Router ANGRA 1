@@ -1,0 +1,140 @@
+Building configuration...
+
+Current configuration : 1832 bytes
+!
+version 12.4
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname ANGRA1
+!
+!
+!
+!
+ip dhcp excluded-address 172.17.6.1
+ip dhcp excluded-address 172.20.6.1
+!
+ip dhcp pool rede17
+ network 172.17.6.0 255.255.255.0
+ default-router 172.17.6.1
+ option 150 ip 192.168.6.13
+ dns-server 8.8.8.8
+ip dhcp pool VLAN50
+ network 172.20.6.0 255.255.255.0
+ default-router 172.20.6.1
+ option 150 ip 192.168.6.13
+ dns-server 8.8.8.8
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 172.16.6.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Serial0/0/0
+ ip address 192.168.6.10 255.255.255.252
+ ip nat outside
+!
+interface Serial0/0/1
+ ip address 192.168.6.13 255.255.255.252
+ ip nat inside
+ clock rate 2000000
+!
+interface Serial0/1/0
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Serial0/1/1
+ no ip address
+ clock rate 2000000
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 100
+ redistribute static 
+ passive-interface FastEthernet0/0
+ network 192.168.6.8 0.0.0.3
+ network 192.168.6.12 0.0.0.3
+ network 172.16.6.0 0.0.0.255
+ no auto-summary
+!
+ip classless
+ip route 172.17.6.0 255.255.255.0 192.168.6.14 
+ip route 172.20.6.0 255.255.255.0 192.168.6.14 
+!
+ip flow-export version 9
+!
+!
+!
+!
+!
+!
+!
+!
+telephony-service
+ max-ephones 10
+ max-dn 10
+ ip source-address 192.168.6.13 port 2000
+ auto assign 1 to 10
+!
+ephone-dn 1
+ number 200
+!
+ephone-dn 2
+ number 201
+!
+ephone 1
+ device-security-mode none
+ mac-address 0002.17CC.3263
+ type CIPC
+ button 1:1
+!
+ephone 2
+ device-security-mode none
+ mac-address 00D0.585A.D652
+ type 7960
+ button 1:2
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
